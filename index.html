@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Love</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.touchswipe/1.6.19/jquery.touchSwipe.min.js"></script>
+    <style>
+        body {
+            background-color: #ffe4e1;
+            font-family: 'Dancing Script', cursive;
+            overflow: hidden;
+        }
+
+        .card {
+            width: 90%;
+            max-width: 400px;
+            margin: 1px;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+
+        .card.active {
+            display: block;
+        }
+
+        .love-meter-container {
+            display: none;
+            text-align: center;
+            margin-top: 50px;
+            margin-left: 10px;
+            margin-right: 10px;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .love-meter {
+            width: 80%;
+            margin: 20px auto;
+        }
+
+        .hearts {
+            font-size: 24px;
+            color: red;
+            display: none;
+        }
+
+        #loveValue {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ff1493;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col items-center justify-center min-h-screen">
+    <div id="cardContainer">
+        <div class="card active">Hey Love ❤️<br/>
+            Swipe right to see the messages!
+        </div>
+        <div class="card">You are the best thing that happened to me 💖</div>
+        <div class="card">You dk .. how much I love you</div>
+        <div class="card">I miss you so so much😭</div>
+        <div class="card">Every moment with you is precious 💕</div>
+        <div class="card">You make my world brighter ☀️</div>
+        <div class="card">I am grateful to have you in my life 🌸</div>
+        <div class="card">No matter what, I will always love you 💞</div>
+    </div>
+
+    <div class="love-meter-container" id="loveMeter">
+        <label for="loveSlider" class="text-xl font-bold">How much do you love me? ❤️</label>
+        <input type="range" id="loveSlider" min="0" max="100" value="0" class="w-full love-meter">
+        <p id="loveValue">0%</p>
+        <div class="hearts">❤️❤️❤️</div>
+        <p id="finalMessage" class="hidden mt-4 text-lg font-bold text-red-500">I Love You 😭</p>
+
+        <form action="https://formspree.io/f/xyzegogo" method="POST">
+            <input type="hidden" name="love" id="loveValueInput">
+            <button type="submit" class="mt-4 px-4 py-2 bg-pink-500 text-white font-bold rounded">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            let cards = $('.card');
+            let index = 0;
+
+            function showNextCard() {
+                if (index < cards.length - 1) {
+                    $(cards[index]).fadeOut(400, function () {
+                        index++;
+                        $(cards[index]).addClass('active').fadeIn(400);
+                    });
+                } else {
+                    $(cards[index]).fadeOut(400, function () {
+                        $('#loveMeter').fadeIn(600);
+                    });
+                }
+            }
+
+            $('.card').swipe({
+                swipeLeft: function () {
+                    showNextCard();
+                },
+                swipeRight: function () {
+                    showNextCard();
+                },
+                threshold: 50
+            });
+
+            $('#loveSlider').on('input', function () {
+                let value = $(this).val();
+                $('#loveValue').text(value + "%");
+                $('#loveValueInput').val(value);
+                $('.hearts').fadeIn().css('opacity', value / 100);
+                if (value == 100) {
+                    $('#finalMessage').fadeIn(600);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
